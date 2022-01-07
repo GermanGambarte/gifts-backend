@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
+const { v4: uuid } = require('uuid')
 const app = express()
-const uuid = require('uuid/v4')
 
 app.use(cors())
 app.use(express.json())
@@ -74,7 +74,6 @@ app.post('/api/gifts', (request, response) => {
   gifts = [...gifts, newGift]
   response.json(newGift)
 })
-
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
