@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { v4: uuid } = require('uuid')
+// const { v4: uuid } = require('uuid')
 const app = express()
 
 app.use(cors())
@@ -64,15 +64,16 @@ app.post('/api/gifts', (request, response) => {
       error: 'gift.gift is missing',
     })
   }
-  const newGift = {
-    id: uuid(),
-    gift: gift.gift,
-    quantity: gift.quantity,
-    price: gift.price,
-    owner: gift.owner,
-  }
-  gifts = [...gifts, newGift]
-  response.json(newGift)
+  // const newGift = {
+  //   id: uuid(),
+  //   gift: gift.gift,
+  //   quantity: gift.quantity,
+  //   price: gift.price,
+  //   owner: gift.owner,
+  // }
+  // response.json(newGift)
+  gifts = [...gifts, gift]
+  // gifts.push(gift)
 })
 
 const PORT = process.env.PORT || 3001
