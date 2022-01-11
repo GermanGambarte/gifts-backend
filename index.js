@@ -6,36 +6,36 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-let gifts = [
-  {
-    id: 1,
-    gift: 'Chocolate',
-    quantity: 3,
-    price: 10,
-    owner: 'Olga',
-  },
-  {
-    id: 2,
-    gift: 'Remera',
-    quantity: 2,
-    price: 20,
-    owner: 'Raul',
-  },
-  {
-    id: 3,
-    gift: 'Vitel Toné',
-    quantity: 1,
-    price: 50,
-    owner: 'Teresa',
-  },
-  {
-    id: 4,
-    gift: 'Caramelos',
-    quantity: 5,
-    price: 12,
-    owner: 'Horacio',
-  },
-]
+let gifts = []
+//   {
+//     id: 1,
+//     gift: 'Chocolate',
+//     quantity: 3,
+//     price: 10,
+//     owner: 'Olga',
+//   },
+//   {
+//     id: 2,
+//     gift: 'Remera',
+//     quantity: 2,
+//     price: 20,
+//     owner: 'Raul',
+//   },
+//   {
+//     id: 3,
+//     gift: 'Vitel Toné',
+//     quantity: 1,
+//     price: 50,
+//     owner: 'Teresa',
+//   },
+//   {
+//     id: 4,
+//     gift: 'Caramelos',
+//     quantity: 5,
+//     price: 12,
+//     owner: 'Horacio',
+//   },
+// ]
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World</h1>')
@@ -46,14 +46,16 @@ app.get('/api/gifts', (request, response) => {
 })
 
 app.get('/api/gifts/:id', (request, response) => {
-  const id = Number(request.params.id)
+  const id = request.params.id
   const gift = gifts.find((gift) => gift.id === id)
   response.send(gift)
 })
 
 app.delete('/api/gifts/:id', (request, response) => {
-  const id = Number(request.params.id)
+  const id = request.params.id
   const gift = gifts.filter((gift) => gift.id !== id)
+  console.log(gift)
+  gifts = [gift]
   response.send(gift)
 })
 
@@ -68,6 +70,7 @@ app.post('/api/gifts', (request, response) => {
     id: uuid(),
     gift: gift.gift,
     quantity: gift.quantity,
+    image: gift.image,
     price: gift.price,
     owner: gift.owner,
   }
