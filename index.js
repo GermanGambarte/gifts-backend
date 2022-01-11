@@ -8,28 +8,28 @@ app.use(express.json())
 
 let gifts = [
   {
-    id: 1,
+    id: '1',
     gift: 'Chocolate',
     quantity: 3,
     price: 10,
     owner: 'Olga',
   },
   {
-    id: 2,
+    id: '2',
     gift: 'Remera',
     quantity: 2,
     price: 20,
     owner: 'Raul',
   },
   {
-    id: 3,
+    id: '3',
     gift: 'Vitel Toné',
     quantity: 1,
     price: 50,
     owner: 'Teresa',
   },
   {
-    id: 4,
+    id: '4',
     gift: 'Caramelos',
     quantity: 5,
     price: 12,
