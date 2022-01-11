@@ -54,7 +54,6 @@ app.get('/api/gifts/:id', (request, response) => {
 app.delete('/api/gifts/:id', (request, response) => {
   const id = request.params.id
   gifts = gifts.filter((gift) => gift.id !== id)
-  console.log(gifts)
   response.send(gifts)
 })
 
@@ -75,7 +74,6 @@ app.post('/api/gifts', (request, response) => {
   }
   response.json(newGift)
   gifts = [...gifts, newGift]
-  // gifts.push(gift)
 })
 
 const PORT = process.env.PORT || 3001
