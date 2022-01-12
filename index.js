@@ -50,6 +50,7 @@ app.get('/api/gifts/:id', (request, response) => {
   const gift = gifts.find((gift) => gift.id === id)
   response.send(gift)
 })
+
 app.put('/api/gifts/:id', (request, response) => {
   const id = request.params.id
   const body = request.body
@@ -63,13 +64,13 @@ app.put('/api/gifts/:id', (request, response) => {
     }
     return gift
   })
-  response.send(gifts)
+  response.json(gifts)
 })
 
 app.delete('/api/gifts/:id', (request, response) => {
   const id = request.params.id
   gifts = gifts.filter((gift) => gift.id !== id)
-  response.send(gifts)
+  response.json(gifts)
 })
 
 app.post('/api/gifts', (request, response) => {
@@ -87,8 +88,8 @@ app.post('/api/gifts', (request, response) => {
     price: gift.price,
     owner: gift.owner,
   }
-  response.json(newGift)
   gifts = [...gifts, newGift]
+  response.json(gifts)
 })
 
 const PORT = process.env.PORT || 3001
