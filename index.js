@@ -50,6 +50,21 @@ app.get('/api/gifts/:id', (request, response) => {
   const gift = gifts.find((gift) => gift.id === id)
   response.send(gift)
 })
+app.put('/api/gifts/:id', (request, response) => {
+  const id = request.params.id
+  const body = request.body
+  gifts = gifts.map((gift) => {
+    if (gift.id === id) {
+      gift.gift = body.gift
+      gift.quantity = body.quantity
+      gift.image = body.image
+      gift.price = body.price
+      gift.owner = body.owner
+    }
+    return gift
+  })
+  response.send(gifts)
+})
 
 app.delete('/api/gifts/:id', (request, response) => {
   const id = request.params.id

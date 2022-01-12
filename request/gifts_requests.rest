@@ -14,3 +14,13 @@ content-type: application/json
   "price": "1234",
   "owner": "Irma"
 }
+### 
+PUT http://localhost:3001/api/gifts/2 HTTP/1.1
+content-type: application/json
+
+{
+  "gift": "Chocolate",
+  "quantity": "1", 
+  "price": "1234",
+  "owner": "Irma"
+}
