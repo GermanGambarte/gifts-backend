@@ -1,21 +1,11 @@
 GET http://localhost:3001/api/gifts
 
 ###
-DELETE http://localhost:3001/api/gifts/2
+DELETE http://localhost:3001/api/gifts/61e6f42755a1287364940687
 
 ###
 
-POST https://quiet-ravine-72272.herokuapp.com/api/gifts HTTP/1.1
-content-type: application/json
-
-{
-  "gift": "Chocolate",
-  "quantity": "1", 
-  "price": "1234",
-  "owner": "Irma"
-}
-### 
-PUT http://localhost:3001/api/gifts/2 HTTP/1.1
+POST http://localhost:3001/api/gifts HTTP/1.1
 content-type: application/json
 
 {
@@ -23,4 +13,14 @@ content-type: application/json
   "quantity": 1, 
   "price": 1234,
   "owner": "Irma"
+}
+### 
+PUT http://localhost:3001/api/gifts/61e706d59a7bca9d20cccda5 HTTP/1.1
+content-type: application/json
+
+{
+  "gift": "Pelota",
+  "quantity": 1, 
+  "price": 5678,
+  "owner": "Norma"
 }

@@ -1,98 +1,77 @@
+require('dotenv').config()
+require('./mongo')
+const Gift = require('./models/Gift')
 const express = require('express')
 const cors = require('cors')
-const { v4: uuid } = require('uuid')
+const handleErrors = require('./middleware/handleErrors')
+const notFound = require('./middleware/notFound')
 const app = express()
-
 app.use(cors())
 app.use(express.json())
-
-let gifts = [
-  {
-    id: '1',
-    gift: 'Chocolate',
-    quantity: 3,
-    price: 10,
-    owner: 'Olga',
-  },
-  {
-    id: '2',
-    gift: 'Remera',
-    quantity: 2,
-    price: 20,
-    owner: 'Raul',
-  },
-  {
-    id: '3',
-    gift: 'Vitel Toné',
-    quantity: 1,
-    price: 50,
-    owner: 'Teresa',
-  },
-  {
-    id: '4',
-    gift: 'Caramelos',
-    quantity: 5,
-    price: 12,
-    owner: 'Horacio',
-  },
-]
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World</h1>')
 })
 
 app.get('/api/gifts', (request, response) => {
-  response.json(gifts)
+  Gift.find({}).then((gifts) => response.json(gifts))
 })
 
-app.get('/api/gifts/:id', (request, response) => {
+app.get('/api/gifts/:id', (request, response, next) => {
   const id = request.params.id
-  const gift = gifts.find((gift) => gift.id === id)
-  response.send(gift)
+  Gift.findById(id)
+    .then((gift) => {
+      if (gift) return response.json(gift)
+      response.status(404).end()
+    })
+    .catch((err) => next(err))
 })
 
-app.put('/api/gifts/:id', (request, response) => {
+app.put('/api/gifts/:id', (request, response, next) => {
   const id = request.params.id
   const body = request.body
-  gifts = gifts.map((gift) => {
-    if (gift.id === id) {
-      gift.gift = body.gift
-      gift.quantity = body.quantity
-      gift.image = body.image
-      gift.price = body.price
-      gift.owner = body.owner
-    }
-    return gift
-  })
-  response.json(gifts)
-})
-
-app.delete('/api/gifts/:id', (request, response) => {
-  const id = request.params.id
-  gifts = gifts.filter((gift) => gift.id !== id)
-  response.json(gifts)
-})
-
-app.post('/api/gifts', (request, response) => {
-  const gift = request.body
-  if (!gift || !gift.gift) {
-    return response.status(400).json({
-      error: 'gift.gift is missing',
-    })
+  const newGiftInfo = {
+    gift: body.gift,
+    quantity: body.quantity,
+    image: body.image,
+    price: body.price,
+    owner: body.owner,
   }
-  const newGift = {
-    id: uuid(),
+  Gift.findByIdAndUpdate(id, newGiftInfo, { new: true })
+    .then((result) => response.json(result))
+    .catch((err) => next(err))
+})
+
+app.delete('/api/gifts/:id', (request, response, next) => {
+  const id = request.params.id
+  Gift.findByIdAndDelete(id)
+    .then(() => response.status(204).end())
+    .catch((err) => next(err))
+})
+
+app.post('/api/gifts', (request, response, next) => {
+  const gift = request.body
+  if (!gift || !gift.gift)
+    response.status(400).json({
+      error: 'required "regalo" field is missing',
+    })
+  const newGift = new Gift({
     gift: gift.gift,
     quantity: gift.quantity,
-    image: gift.image,
     price: gift.price,
     owner: gift.owner,
-  }
-  gifts = [...gifts, newGift]
-  response.json(gifts)
+    image: gift.image,
+  })
+  newGift
+    .save()
+    .then((savedGift) => response.json(savedGift))
+    .catch((err) => next(err))
 })
 
-const PORT = process.env.PORT || 3001
+app.use(notFound)
+app.use(handleErrors)
+
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)
 })
