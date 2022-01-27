@@ -48,7 +48,7 @@ app.put('/api/gifts/:id', (request, response, next) => {
 
 app.delete('/api/gifts/:id', (request, response, next) => {
   const id = request.params.id
-  Gift.findByIdAndDelete(id)
+  Gift.findOneAndDelete({ id: id })
     .then(() => {
       response.status(204).end()
     })

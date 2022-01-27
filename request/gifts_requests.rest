@@ -1,7 +1,7 @@
 GET http://localhost:3001/api/gifts
 
 ###
-DELETE http://localhost:3001/api/gifts/61e6f42755a1287364940687
+DELETE http://localhost:3001/api/gifts/61f2dfde98009d387ce7a9fd
 
 ###
 
