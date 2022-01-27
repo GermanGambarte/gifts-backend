@@ -5,7 +5,6 @@ const express = require('express')
 const cors = require('cors')
 const handleErrors = require('./middleware/handleErrors')
 const notFound = require('./middleware/notFound')
-const mongoose = require('mongoose')
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -17,7 +16,6 @@ app.get('/', (request, response) => {
 app.get('/api/gifts', (request, response) => {
   Gift.find({}).then((gifts) => {
     response.json(gifts)
-    mongoose.connection.close()
   })
 })
 
@@ -44,7 +42,6 @@ app.put('/api/gifts/:id', (request, response, next) => {
   Gift.findByIdAndUpdate(id, newGiftInfo, { new: true })
     .then((result) => {
       response.json(result)
-      mongoose.connection.close()
     })
     .catch((err) => next(err))
 })
@@ -54,7 +51,6 @@ app.delete('/api/gifts/:id', (request, response, next) => {
   Gift.findByIdAndDelete(id)
     .then(() => {
       response.status(204).end()
-      mongoose.connection.close()
     })
     .catch((err) => next(err))
 })
@@ -76,7 +72,6 @@ app.post('/api/gifts', (request, response, next) => {
     .save()
     .then((savedGift) => {
       response.json(savedGift)
-      mongoose.connection.close()
     })
     .catch((err) => next(err))
 })
@@ -85,7 +80,7 @@ app.use(notFound)
 app.use(handleErrors)
 
 const PORT = process.env.PORT
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)
 })
-module.exports = { app, server }
+// module.exports = { app, server }
