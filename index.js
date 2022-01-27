@@ -5,6 +5,7 @@ const express = require('express')
 const cors = require('cors')
 const handleErrors = require('./middleware/handleErrors')
 const notFound = require('./middleware/notFound')
+const mongoose = require('mongoose')
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -14,7 +15,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/gifts', (request, response) => {
-  Gift.find({}).then((gifts) => response.json(gifts))
+  Gift.find({}).then((gifts) => {
+    response.json(gifts)
+    mongoose.connection.close()
+  })
 })
 
 app.get('/api/gifts/:id', (request, response, next) => {
@@ -38,14 +42,20 @@ app.put('/api/gifts/:id', (request, response, next) => {
     owner: body.owner,
   }
   Gift.findByIdAndUpdate(id, newGiftInfo, { new: true })
-    .then((result) => response.json(result))
+    .then((result) => {
+      response.json(result)
+      mongoose.connection.close()
+    })
     .catch((err) => next(err))
 })
 
 app.delete('/api/gifts/:id', (request, response, next) => {
   const id = request.params.id
   Gift.findByIdAndDelete(id)
-    .then(() => response.status(204).end())
+    .then(() => {
+      response.status(204).end()
+      mongoose.connection.close()
+    })
     .catch((err) => next(err))
 })
 
@@ -64,7 +74,10 @@ app.post('/api/gifts', (request, response, next) => {
   })
   newGift
     .save()
-    .then((savedGift) => response.json(savedGift))
+    .then((savedGift) => {
+      response.json(savedGift)
+      mongoose.connection.close()
+    })
     .catch((err) => next(err))
 })
 
@@ -72,6 +85,7 @@ app.use(notFound)
 app.use(handleErrors)
 
 const PORT = process.env.PORT
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)
 })
+module.exports = { app, server }
